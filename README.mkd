@@ -1,0 +1,5 @@
+A simple static site generator.
+
+I don't really recommend most people use this for their own projects. I made it
+because (sadly) it seemed quicker to make my own than to grok the documentation
+of existing projects.
