@@ -1,4 +1,4 @@
 out
-*/.sass-cache/*
+**/.sass-cache/*
 *.css
 *.css.map
