@@ -3,3 +3,9 @@ A simple static site generator.
 I don't really recommend most people use this for their own projects. I made it
 because (sadly) it seemed quicker to make my own than to grok the documentation
 of existing projects.
+
+# Running the generator
+
+I recommend you use docker.
+Use `docker build -t static_site_gen .` to create a docker image using my Dockerfile.
+Then use `gen.fish` to run `gen.py` inside the image.
