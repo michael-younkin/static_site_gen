@@ -29,6 +29,7 @@ class DataFile:
 
     def __init__(self, path):
         self.input_data = open(path).read()
+        self.__output_data = None
 
         self.path = path
         self.filename = os.path.basename(path)
@@ -39,11 +40,9 @@ class DataFile:
 
         if self.ext == "mkd":
             self.input_type = 'markdown'
-            self.output_data = md.convert(self.input_data)
             self.output_ext = 'html'
         else:
             self.input_type = 'raw'
-            self.output_data = self.input_data
             self.output_ext = self.ext
 
         output_filename = self.untagged_filename + '.' + self.output_ext
@@ -52,6 +51,15 @@ class DataFile:
                 out_dir,
                 dirname[len(data_dir) + 1:],
                 output_filename)
+
+    @property
+    def output_data(self):
+        if self.__output_data is None:
+            if self.ext == "mkd":
+                self.__output_data = md.convert(self.input_data)
+            else:
+                self.__output_data = self.input_data
+        return self.__output_data
 
 
 def get_data_dict():
