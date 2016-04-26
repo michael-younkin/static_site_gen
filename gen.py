@@ -3,6 +3,10 @@
 assert __name__ == "__main__"
 
 import glob
+import os
+import os.path
+import shutil
+import subprocess
 
 import build
 
@@ -44,7 +48,7 @@ class Thunk:
     @property
     def value(self):
         if self.__value is None:
-            arg_values = recursive_eval(self.args)
+            arg_values = recursive_eval(self.args)[0]
             self.__value = getattr(self.commands, self.command)(*arg_values)
         return self.__value
 
@@ -60,7 +64,7 @@ class ThunkCache:
         self.thunks = {}
 
     def thunk(self, commands, command, args):
-        key = (command, args)
+        key = (command, tuple(args))
         if key in self.thunks:
             return self.thunks[key]
         else:
@@ -78,11 +82,40 @@ class Commands:
         print(filename)
         return 'markdown output'
 
-    def apply(self, command, args):
+    def apply(self, command, *args):
         return tuple(self.cache.thunk(self, command, arg) for arg in args)
 
+    def flatten(self, *args):
+        out = []
+        for arg in args:
+            # Flatten any tuples
+            if isinstance(arg, tuple):
+                for subarg in arg:
+                    out.append(subarg)
+            else:
+                out.append(arg)
+        return out
+
     def glob(self, s):
-        return glob.glob(s)
+        real_glob = os.path.join("src", s)
+        return glob.glob(real_glob)
+
+    def build_with_template(self, tmpl, data):
+        print("Build with template", tmpl, data)
+
+    def build_template(self, tmpl):
+        print("Build template", tmpl)
+
+    def scss(self, src, dest):
+        real_src = os.path.join("src", src)
+        real_dest = os.path.join("out", dest)
+        subprocess.check_call(["scss", real_src, real_dest])
+
+    def mkdir(self, path):
+        os.makedirs(path, exist_ok=True)
+
+    def rmdir(self, path):
+        shutil.rmtree(path, ignore_errors=True)
 
 
 class BuildContext:
@@ -92,23 +125,30 @@ class BuildContext:
         self.commands = Commands(self.thunk_cache)
 
         # Parse instructions
-        thunks = self.parse_instructions(instructions)
+        thunks = self.__parse_instructions(instructions)
+        print("Parsed thunks:")
         print(thunks)
+        print("")
 
-    def parse_instructions(self, instructions):
+        # Build
+        for thunk in thunks:
+            print(thunk.value)
+
+    def __parse_instructions(self, instructions):
         out = []
         for instruction in instructions:
-            out.append(self.parse_instruction(instruction))
+            out.append(self.__parse_instruction(instruction))
         return tuple(out)
 
-    def parse_instruction(self, instruction):
+    def __parse_instruction(self, instruction):
         if isinstance(instruction, str):
             return instruction
         elif len(instruction) == 0:
             return ()
         else:
             command = instruction[0]
-            args = self.parse_instructions(instruction[1:])
+            args = self.__parse_instructions(instruction[1:])
             return self.thunk_cache.thunk(self.commands, command, args)
+
 
 BuildContext(build.instructions)
