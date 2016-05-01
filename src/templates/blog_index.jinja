@@ -1,0 +1,11 @@
+{% extends "templates/base.jinja" %}
+
+{% block body %}
+<h1>mby.io - Blog - Index</h1>
+
+<ul>
+{% for post in blog_posts %}
+<li><a href="{{ post.index_href }}">{{ post.title }}</a></li>
+{% endfor %}
+</ul>
+{% endblock body %}

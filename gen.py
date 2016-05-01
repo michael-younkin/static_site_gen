@@ -35,7 +35,7 @@ args = [
     SCSS_SRC,
     CSS_OUT,
 ]
-subprocess.run(args).check_returncode()
+subprocess.check_call(args)
 
 # Load Templates
 print("Load Jinja templates")
@@ -53,6 +53,11 @@ class BlogPost:
     def __init__(self, filename):
         self.filename = filename
         self.html = md.convert(open(filename).read())
+        self.title = os.path.splitext(os.path.basename(filename))[0]
+        self.output_filename = "%s.html" % self.title
+        self.output_path = "out/blog/%s" % self.output_filename
+        self.index_href = self.output_filename
+        self.root_href = "/blog/%s" % self.output_filename
 
 blog_posts = {}
 for blog_file in glob("src/data/blog/*.mkd"):
@@ -65,7 +70,12 @@ os.mkdir("out/blog")
 for post in blog_posts.values():
     context = {"post_title": post.filename, "post_body": post.html}
     post_docs = env.get_template("templates/blog_post.jinja").render(context)
-    name = os.path.splitext(os.path.basename(post.filename))[0]
-    out_filename = "out/blog/%s.html" % name
+    out_filename = "out/blog/%s.html" % post.title
     print("Render and write", out_filename)
     open(out_filename, "w").write(post_docs)
+
+# Gen blog post index page
+print("Render and write out/blog/index.html")
+context = {"blog_posts": blog_posts.values()}
+blog_index = env.get_template("templates/blog_index.jinja").render(context)
+open("out/blog/index.html", "w").write(blog_index)
