@@ -46,14 +46,16 @@ print("Render and write index.html")
 open("out/index.html", "w").write(env.get_template("data/index.jinja").render())
 
 # Load all blog posts
-md = Markdown()
+md = Markdown(extensions = ['markdown.extensions.meta'])
 
 class BlogPost:
 
     def __init__(self, filename):
         self.filename = filename
         self.html = md.convert(open(filename).read())
-        self.title = os.path.splitext(os.path.basename(filename))[0]
+        self.meta_data = md.Meta
+        self.title = self.meta_data['title'][0]
+        self.date = self.meta_data['date'][0]
         self.output_filename = "%s.html" % self.title
         self.output_path = "out/blog/%s" % self.output_filename
         self.index_href = self.output_filename
@@ -68,11 +70,10 @@ os.mkdir("out/blog")
 
 # Render and save blog posts
 for post in blog_posts.values():
-    context = {"post_title": post.filename, "post_body": post.html}
+    context = {"post_title": post.title, "post_body": post.html}
     post_docs = env.get_template("templates/blog_post.jinja").render(context)
-    out_filename = "out/blog/%s.html" % post.title
-    print("Render and write", out_filename)
-    open(out_filename, "w").write(post_docs)
+    print("Render and write", post.output_path)
+    open(post.output_path, "w").write(post_docs)
 
 # Gen blog post index page
 print("Render and write out/blog/index.html")

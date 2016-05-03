@@ -1,1 +1,5 @@
+Title: First Post!
+Author: Michael Younkin
+Date: May 2, 2016
+
 Hello world! This is my first post!
