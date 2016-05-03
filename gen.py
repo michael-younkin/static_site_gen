@@ -58,8 +58,7 @@ class BlogPost:
         self.date = self.meta_data['date'][0]
         self.output_filename = "%s.html" % self.title
         self.output_path = "out/blog/%s" % self.output_filename
-        self.index_href = self.output_filename
-        self.root_href = "/blog/%s" % self.output_filename
+        self.abs_href = "/blog/%s" % self.output_filename
 
 blog_posts = {}
 for blog_file in glob("src/data/blog/*.mkd"):
