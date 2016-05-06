@@ -45,6 +45,10 @@ env = Environment(loader=FileSystemLoader(SRC_DIR))
 print("Render and write index.html")
 open("out/index.html", "w").write(env.get_template("data/index.jinja").render())
 
+# Render about.html
+print("Render and write about.html")
+open("out/about.html", "w").write(env.get_template("data/about.jinja").render())
+
 # Load all blog posts
 md = Markdown(extensions = ['markdown.extensions.meta'])
 
