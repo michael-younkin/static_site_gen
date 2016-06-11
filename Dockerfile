@@ -9,6 +9,7 @@ RUN pip3 install markdown
 RUN apt-get install -y ruby
 RUN gem install sass
 RUN pip3 install Jinja2
+RUN pip3 install pyinotify
 
 RUN useradd site_gen
 USER site_gen
