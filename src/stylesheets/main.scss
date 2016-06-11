@@ -1,1 +1,27 @@
-@import 'bourbon/bourbon';
+@import "bourbon/bourbon";
+@import "neat/neat";
+
+$monospace-font: "Inconsolata", monospace;
+
+.centered-inline {
+    text-align: center;
+}
+
+.horizontal-list {
+    li {
+        display: inline;
+        list-style-type: none;
+        padding-right: 20px;
+    }
+}
+
+section.grid {
+    @include outer-container;
+    article.index {
+        @include span-columns(6);
+    }
+}
+
+.code-text {
+    font-family: $monospace-font;
+}

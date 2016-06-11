@@ -1,12 +1,19 @@
 {% extends "templates/base.jinja" %}
 
 {% block body %}
-    <h1>Hi, I'm Michael!</h1>
-
-    Check out my
-    <a href="/about.html">About page</a>,
-    <a href="/blog/">Blog</a>,
-    <a href="https://github.com/michael-younkin/resume/raw/master/resume.pdf">Resume</a>,
-    <a href="https://github.com/michael-younkin">Github</a>,
-    or <a href="https://www.linkedin.com/in/michaelyounkin">LinkedIn</a>.
+    <section class="grid">
+        <article class="index code-text">
+            <h1>git log</h1>
+            <ul>
+                <li>Setup Packet and generic socket in separate files</li>
+            </ul>
+        </article>
+        <article class="index">
+            <h1>Prose</h1>
+            <ul>
+                <li>Making an object pool in Rust [Rust] [Tutorial]</li>
+                <li>Strange parts of Rust [Rust] [Bit] [Strange-Parts-Of-Rust]</li>
+            </ul>
+        </article>
+    </section>
 {% endblock body %}
