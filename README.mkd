@@ -7,7 +7,7 @@ of existing projects.
 # Running the generator
 
 I recommend you use docker.
-Use `docker build -t static_site_gen .` to create a docker image using my Dockerfile.
+Use `docker build --pull -t static_site_gen .` to create a docker image using my Dockerfile.
 Then use `gen.fish` to run `gen.py` inside the image.
 
 # The Example Site
